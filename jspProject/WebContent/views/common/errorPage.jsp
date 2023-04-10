@@ -12,6 +12,6 @@
 <body>
 	<h1 align="center" style="color:red"><%=errorMsg %></h1>
 	
-	<h3 align="center"><a href="<%=request.getContextPath()%>">인덱스로</a></h3>
+	<h3 align="center"><a href="<%=request.getContextPath()%>">인덱스로!!커밋확인용</a></h3>
 </body>
 </html>
