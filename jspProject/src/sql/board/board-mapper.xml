@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+<!-- 여울 -->
+	
+		<!-- COUNT 별칭 부여 -->	
+		<entry key="selectListCount">
+			SELECT COUNT(*) COUNT
+			FROM BOARD
+			WHERE STATUS = 'Y'
+			AND BOARD_TYPE = 1
+		</entry>	
+		
+		<!-- 아..; 쓰지말기 쿼리문에.... -->
+	
+		<!-- 많이 복잡 복습하기 -->
+		<entry key="selectList">
+		SELECT*   
+		FROM  (SELECT ROWNUM RNUM, A.*
+		        FROM(SELECT BOARD_NO, CATEGORY_NAME, BOARD_TITLE, USER_ID, COUNT, CREATE_DATE
+		        FROM BOARD B 
+		        JOIN CATEGORY C USING (CATEGORY_NO)
+		        JOIN MEMBER M ON (BOARD_WRITER = USER_NO)
+		        WHERE BOARD_TYPE = 1
+		        AND B.STATUS = 'Y'
+		        ORDER BY CREATE_DATE DESC) A )
+		WHERE RNUM BETWEEN ? AND ?
+		</entry>
+		
+		
+		
+		<!--  * 보다는 직접 컬럼명 적기  -->
+		<entry key="categorylist">
+		SELECT CATEGORY_NO, CATEGORY_NAME 
+		FROM CATEGORY
+		</entry>
+		
+		
+		<entry key="insertBoard">
+		<!-- 나머지는 DEFAULT 있으니까 -->
+		<!-- BOARD SQL 봐봐 -->
+		INSERT INTO BOARD(BOARD_NO
+						, BOARD_TYPE
+						, CATEGORY_NO
+						, BOARD_TITLE
+						, BOARD_CONTENT
+						, BOARD_WRITER)
+		VALUES(SEQ_BNO.NEXTVAL, 1, ?,?,?,?)
+		</entry>
+		
+		<entry key="insertAttachment">
+		<!-- UPLOAD_DATE & STATUS 얘는 디폴트라서 따로 안해도됨 -->
+		INSERT INTO ATTACHMENT (FILE_NO
+								,REF_BNO
+								,ORIGIN_NAME
+								,CHANGE_NAME
+								,FILE_PATH
+								)
+		VALUES (SEQ_FNO.NEXTVAL,SEQ_BNO.CURRVAL, ?, ?, ?)
+		</entry>
+		
+		<!-- 먼저 게시판을 적어서   SEQ_BNO.CURRVAL CURRENT VALUE 쓰면 된다는데-->
+		<!-- SET에 이꼴 못 적더라 -->
+		<entry key="increaseCount">
+		UPDATE BOARD
+		SET COUNT = COUNT + 1 
+		WHERE BOARD_NO = ?
+		AND STATUS = 'Y'
+		</entry>
+		
+		
+		<!-- USER_ID는 MEMBER에서 -->
+		<entry key="selectBoard">
+		SELECT BOARD_NO
+			,CATEGORY_NAME
+			,BOARD_TITLE
+			,USER_ID
+			,CREATE_DATE
+			,BOARD_CONTENT
+		FROM BOARD
+		JOIN CATEGORY USING(CATEGORY_NO)
+		JOIN MEMBER ON(USER_NO=BOARD_WRITER)
+		WHERE BOARD_NO=?
+		</entry>
+		
+		
+			
+		<!-- ORIGIN_NAME, CHANGE_NAME, FILE_PATH 처음에 식별자를 이렇게 했는데 식별자는 가지고 다녀야한다고 하심 -->
+		<!-- 식별자는 같이 조회해와야함 -->
+		<entry key="selectAttachment">
+		SELECT FILE_NO
+			, ORIGIN_NAME
+			, CHANGE_NAME
+			, FILE_PATH
+		FROM ATTACHMENT
+		WHERE REF_BNO = ?
+		AND STATUS = 'Y'
+		</entry>
+		
+	
+
+		
+			<entry key="updateBoard">
+		UPDATE BOARD
+		SET CATEGORY_NO = ?
+		 	,BOARD_TITLE = ?
+		 	,BOARD_CONTENT = ?
+		WHERE BOARD_NO = ?
+		AND STATUS = 'Y'
+		</entry>
+		
+		
+		<entry key="updateAttachment">
+		UPDATE ATTACHMENT
+		SET ORIGIN_NAME = ?
+			,CHANGE_NAME = ?
+			,FILE_PATH = ?
+			,UPLOAD_DATE = SYSDATE
+		WHERE FILE_NO = ?
+		AND STATUS ='Y'
+	</entry>
+		
+		<!-- UPLOAD_DATE & STATUS 얘는 디폴트라서 따로 안해도됨 -->
+		<entry key="newInsertAttachment">
+		INSERT INTO ATTACHMENT(FILE_NO
+							  ,REF_BNO
+							  ,ORIGIN_NAME
+							  ,CHANGE_NAME
+						      ,FILE_PATH
+							  )
+		VALUES (SEQ_FNO.NEXTVAL,?,?,?,?)
+		</entry>
+		
+		<!--  우리가 들고온 참조글 게시글 번호를 설정하면 된다고함 ?????? -->
+	
+	
+		<entry key="deleteAttachment">
+		UPDATE ATTACHMENT 
+		SET STATUS = 'N'
+		WHERE REF_BNO = ?
+		AND STATUS = 'Y'
+		</entry>
+	
+		<entry key = "deleteBoard">
+		UPDATE BOARD
+		SET STATUS = 'N'
+		WHERE BOARD_NO = ?
+		AND STATUS = 'Y'
+		</entry>
+		
+</properties>

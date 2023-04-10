@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+
+	
+		<!-- CONTENT는 들고갈 필요 X 공지사항리스트에 세부내용 필요X 우리선택임 너무 많이 가져가면 성능저하 필요할 데이터만 가져갈 것 -->
+		<!-- USER_ID 가져가려고 JOIN구문 이용 -->
+		<!-- STATUS가 두 곳 다 있어서 별칭 써서 NOTICE에 있는 STATUS가 필요하다 이렇게 N.STATUS 로 구분  -->
+		<entry key="selectList">
+		
+		SELECT NOTICE_NO, NOTICE_TITLE, USER_ID, COUNT, CREATE_DATE
+		FROM NOTICE N
+		JOIN MEMBER M ON (USER_NO = NOTICE_WRITER)
+		WHERE N.STATUS = 'Y'
+		ORDER BY CREATE_DATE DESC
+		
+		</entry>
+	
+		<entry key="insertNotice">
+		INSERT INTO NOTICE (NOTICE_NO, NOTICE_TITLE, NOTICE_CONTENT, NOTICE_WRITER) 
+		VALUES (SEQ_NNO.NEXTVAL, ?, ?, ?)
+		</entry>
+		
+		
+		<!-- 내꺼는 조인안했는데..?쌤은 NOTICE_NO, NOTICE_TITLE, USER_ID, CREATE_DATE, NOTICE_CONTENT 가져오심 -->
+		<!-- 게시글에 대해서 수정한다고 하면........글번호를 식별자로 계속 갖고 가야함 그때마다 제목입니다..이런걸로 비교 불가 -->
+		
+		<!-- 	SELECT NOTICE_TITLE, NOTICE_WRITER, NOTICE_CONTENT, CREATE_DATE
+		FROM NOTICE 
+		WHERE NOTICE_NO = ? -->
+		
+		<entry key="selectNotice">
+		SELECT NOTICE_NO, NOTICE_TITLE, USER_ID,  CREATE_DATE, NOTICE_CONTENT
+		FROM NOTICE N
+		JOIN MEMBER M ON (NOTICE_WRITER = USER_NO)
+		WHERE NOTICE_NO = ? 
+		AND N.STATUS = 'Y'
+		
+		</entry>
+		
+		<entry key ="updateNotice">
+		UPDATE NOTICE 
+		SET NOTICE_TITLE = ?
+		, NOTICE_CONTENT = ?
+		WHERE NOTICE_NO = ? AND STATUS = 'Y'
+		</entry>
+		
+		
+		<entry key="increaseCount">
+		UPDATE NOTICE
+		SET COUNT = COUNT + 1 
+		WHERE NOTICE_NO = ?
+		AND STATUS = 'Y'
+		</entry>
+		<!-- 삭제한 공지사항 보여지면 안되니까 -->
+		
+		<entry key="deleteNotice">
+		UPDATE NOTICE 
+		SET STATUS = 'N'
+		WHERE NOTICE_NO = ?
+		AND STATUS = 'Y'
+		</entry>
+	
+	
+
+</properties>
