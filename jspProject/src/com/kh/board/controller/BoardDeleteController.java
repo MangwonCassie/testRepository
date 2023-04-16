@@ -30,6 +30,7 @@ public class BoardDeleteController extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		//hi artur and yeooul again
+		//pull request testing
 		//button은 get방식 
 		
 		int boardNo = Integer.parseInt(request.getParameter("bno"));
