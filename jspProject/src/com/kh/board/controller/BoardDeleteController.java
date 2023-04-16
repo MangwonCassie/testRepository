@@ -32,8 +32,8 @@ public class BoardDeleteController extends HttpServlet {
 		//hi artur and yeooul again
 		//pull request testing
 		//button은 get방식 
-		
-		//I'm writing codes on main local.
+		//I remove below line
+
 		//kim to kim test2 
 		
 		int boardNo = Integer.parseInt(request.getParameter("bno"));
