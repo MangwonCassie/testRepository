@@ -11,6 +11,8 @@ import com.kh.board.model.service.BoardService;
 
 /**
  * Servlet implementation class BoardDeleteController
+ * 할 수 있다. 할 수 있다.
+ * 
  */
 @WebServlet("/delete.bo")
 public class BoardDeleteController extends HttpServlet {
